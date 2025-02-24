@@ -10,7 +10,7 @@ from ultralytics.models import RTDETR
 class ObjectDetectionPipeline(nn.Module):
     def __init__(self, yolo_model, detr_model):
         super(ObjectDetectionPipeline, self).__init__()
-        self.packing_layer = BayerPacking()
+        # self.packing_layer = BayerPacking()
         self.preprocess_module = PreprocessModule()
 
         # Object detectors (frozen)
@@ -23,8 +23,8 @@ class ObjectDetectionPipeline(nn.Module):
             param.requires_grad = False
 
     def forward(self, raw_img):
-        packed_img = self.packing_layer(raw_img)
-        processed_img = self.preprocess_module(packed_img)
+        # packed_img = self.packing_layer(raw_img)
+        processed_img = self.preprocess_module(raw_img)
 
         yolo_output = self.yolo(processed_img)
         detr_output = self.detr(processed_img)
@@ -33,12 +33,13 @@ class ObjectDetectionPipeline(nn.Module):
 
 
 # ======================= LOAD MODELS =======================
-def load_yolo(weights_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Multi-model-RAW-Network/yolo11x.pt', data_path='./data/dataset.yaml', device="cuda" if torch.cuda.is_available() else "cpu"):
+def load_yolo(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/yolo11x.pt', data_path='/networkhome/WMGDS/souval_g/datasets/dataset48/day/dataset.yaml', device="cuda" if torch.cuda.is_available() else "cpu"):
     model = YOLO(weights_path)
     model.overrides['data'] = data_path
     return model.to(device)
 
-def load_detr(weights_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Multi-model-RAW-Network/rtdetr-l.pt', data_path='./data//dataset.yaml', device="cuda" if torch.cuda.is_available() else "cpu"):
+
+def load_detr(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/rtdetr-l.pt', data_path='/networkhome/WMGDS/souval_g/datasets/dataset48/day/dataset.yaml', device="cuda" if torch.cuda.is_available() else "cpu"):
     model = RTDETR(weights_path)
     model.overrides['data'] = data_path  #
     return model.to(device)

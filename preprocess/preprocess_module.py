@@ -7,7 +7,7 @@ import torch.nn.functional as F
 class PreprocessModule(nn.Module):
     def __init__(self):
         super(PreprocessModule, self).__init__()
-        self.conv1 = nn.Conv2d(9, 32, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU(inplace=True)
         self.gamma = nn.Parameter(torch.tensor(1.5))  # Learnable gamma initialization

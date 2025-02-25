@@ -54,8 +54,8 @@ def training_step(model, batch, criterion, optimizer):
 
     yolo_loss = criterion['yolo'](yolo_output, targets)
     detr_loss = criterion['detr'](detr_output, targets)
-
     total_loss = yolo_loss + detr_loss
+    
     total_loss.backward()
     optimizer.step()
 

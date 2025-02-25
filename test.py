@@ -10,7 +10,7 @@ from ultralytics.models import RTDETR
 class ObjectDetectionPipeline(nn.Module):
     def __init__(self, yolo_model, detr_model):
         super(ObjectDetectionPipeline, self).__init__()
-        # If needed, you can enable the BayerPacking layer here
+
         # self.packing_layer = BayerPacking()
         self.preprocess_module = PreprocessModule()
 
@@ -24,7 +24,7 @@ class ObjectDetectionPipeline(nn.Module):
             param.requires_grad = False
 
     def forward(self, raw_img):
-        # If you have a BayerPacking layer, apply it here
+
         # packed_img = self.packing_layer(raw_img)
         processed_img = self.preprocess_module(raw_img)
 
@@ -58,19 +58,6 @@ def load_detr(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/
     model.eval()
     return model.to(device)
 
-def print_shapes(outputs, name):
-    if isinstance(outputs, (tuple, list)):
-        print(f"{name} consists of {len(outputs)} elements:")
-        for i, out in enumerate(outputs):
-            if out is None:
-                print(f"  Element {i}: None")
-            elif hasattr(out, "shape"):
-                print(f"  Element {i}: {out.shape}")
-            else:
-                print(f"  Element {i}: type {type(out)}")
-    else:
-        print(f"{name} shape: {outputs.shape}")
-
 
 # ======================= MAIN =======================
 if __name__ == "__main__":
@@ -83,12 +70,10 @@ if __name__ == "__main__":
     # Initialize pipeline with the loaded models
     model = ObjectDetectionPipeline(yolo_model, detr_model).to(device)
 
-    # Use an input resolution that is divisible by the model stride (e.g., 640x640)
-    # IMPORTANT: Ensure the channel dimension (currently 3) matches what your PreprocessModule expects.
     model.eval()
     sample_input = torch.randn(1, 3, 640, 640).to(device)
 
     yolo_output, detr_output = model(sample_input)
 
-    print_shapes(yolo_output, "YOLO Output")
-    print_shapes(detr_output, "RT-DETR Output")
+    print(yolo_output, "YOLO Output")
+    print(detr_output, "RT-DETR Output")

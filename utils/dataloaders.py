@@ -188,25 +188,25 @@ def gather_paths(images_dir, labels_dir, exts=('.jpg','.jpeg','.png','.npy','.ra
 # ==============================
 # 7. Create Dataset from dataset.yaml
 # ==============================
-def create_yolo_dataset(yaml_path, split='train', transform=None, 
+def create_yolo_dataset(yaml_path, mode='train', transform=None, 
                         device='cuda', img_shape=(1,1856,2880), norm_value=255.0):
     """
-    Reads dataset.yaml, picks the correct images folder for `split`,
+    Reads dataset.yaml, picks the correct images folder for `mode`,
     infers the corresponding labels folder by replacing 'images' -> 'labels',
     and returns a CustomDataset.
     """
     train_dir, val_dir, test_dir = parse_dataset_yaml(yaml_path)
 
-    if split == 'train':
+    if mode == 'train':
         images_dir = train_dir
-    elif split == 'val':
+    elif mode == 'val':
         images_dir = val_dir
-    elif split == 'test':
+    elif mode == 'test':
         if test_dir is None:
             raise ValueError("No 'test' key found in dataset.yaml.")
         images_dir = test_dir
     else:
-        raise ValueError("split must be one of ['train', 'val', 'test']")
+        raise ValueError("mode must be one of ['train', 'val', 'test']")
 
     # Infer labels directory by replacing 'images' with 'labels' in the path
     labels_dir = images_dir.replace('images', 'labels')
@@ -256,8 +256,8 @@ if __name__ == "__main__":
     ])
 
     # Create train/val sets
-    train_dataset = create_yolo_dataset(yaml_path, split='train', transform=example_transform)
-    val_dataset   = create_yolo_dataset(yaml_path, split='val',   transform=example_transform)
+    train_dataset = create_yolo_dataset(yaml_path, mode='train', transform=example_transform)
+    val_dataset   = create_yolo_dataset(yaml_path, mode='val',   transform=example_transform)
 
     # Create DataLoaders with the custom collate function
     train_loader = DataLoader(

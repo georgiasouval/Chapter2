@@ -10,13 +10,7 @@ class PreprocessModule(nn.Module):
         self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU(inplace=True)
-        self.gamma = nn.Parameter(torch.tensor(1.5))  # Learnable gamma initialization
-        self.denoise_conv = nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1, bias=False)
-        self.denoise_bn = nn.BatchNorm2d(32)
-        self.edge_conv = nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1, bias=False)
-        nn.init.constant_(self.edge_conv.weight, 0.0)  # Initialize as high-pass filter
-        self.fusion_conv = nn.Conv2d(64, 32, kernel_size=1, bias=False)  # Fuse denoised and edge-enhanced features
-        self.output_conv = nn.Conv2d(32, 3, kernel_size=3, stride=1, padding=1, bias=False)
+     
         
     def forward(self, x):
         x = self.relu(self.bn1(self.conv1(x)))

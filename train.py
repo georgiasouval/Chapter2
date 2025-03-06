@@ -16,8 +16,8 @@ class ObjectDetectionPipeline(nn.Module):
         self.preprocess_module = PreprocessModule()
 
         # # Object detectors (frozen)
-        # self.yolo = yolo_model.eval()
-        # self.detr = detr_model.eval()
+        self.yolo = yolo_model.eval()
+        self.detr = detr_model.eval()
 
         for param in self.yolo.parameters():
             param.requires_grad = False
@@ -36,8 +36,8 @@ class ObjectDetectionPipeline(nn.Module):
 
 
 # ======================= LOAD MODELS =======================
-def load_yolo(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/yolo11x.pt', 
-              data_path='/networkhome/WMGDS/souval_g/datasets/dataset48/day/dataset.yaml', 
+def load_yolo(weights_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Chapter2/yolo11x.pt', 
+              data_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Chapter2/data/dataset.yaml', 
               device="cuda" if torch.cuda.is_available() else "cpu"):
     # Load the YOLO wrapper and update the dataset path
     model_wrapper = YOLO(weights_path)
@@ -48,8 +48,8 @@ def load_yolo(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/
     return model.to(device)
 
 
-def load_detr(weights_path='/networkhome/WMGDS/souval_g/Multi-model-RAW-Network/rtdetr-l.pt', 
-              data_path='/networkhome/WMGDS/souval_g/datasets/dataset48/day/dataset.yaml', 
+def load_detr(weights_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Chapter2/rtdetr-l.pt', 
+              data_path='/home/souval_g_WMGDS.WMG.WARWICK.AC.UK/Desktop/Chapter2/data/dataset.yaml', 
               device="cuda" if torch.cuda.is_available() else "cpu"):
     # Load the RTDETR wrapper and update the dataset path
     model_wrapper = RTDETR(weights_path)
@@ -74,9 +74,9 @@ criterion = {
 
 # ======================= TRAINING =======================
 
-yolo_loss = criterion['yolo'](yolo_output, yolo_target)
-rtdetr_loss = criterion['rtdetr'](rtdetr_output, rtdetr_target)
-total_loss = yolo_loss + rtdetr_loss
+# yolo_loss = criterion['yolo'](yolo_output, yolo_target)
+# rtdetr_loss = criterion['rtdetr'](rtdetr_output, rtdetr_target)
+# total_loss = yolo_loss + rtdetr_loss
 
 
 # ======================= EVALUATION =======================
